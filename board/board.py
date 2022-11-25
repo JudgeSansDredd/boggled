@@ -3,7 +3,7 @@ class Board:
         self.layout = layout
         self.dimension = len(layout)
 
-    def getLetter(self, pos):
+    def get_letter(self, pos):
         x, y = pos
         return self.layout[y][x]
 
