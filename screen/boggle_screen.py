@@ -4,33 +4,33 @@ from .screen import Screen
 
 
 class Boggle_Screen(Screen):
-    def __init__(self, board):
+    def __init__(self):
         super().__init__("Nathan's Boggler", (800, 600))
-        self.board = board
+        self.check_word = ''
 
-    def tick(self):
-        self.clear_screen()
-        self.draw_dice()
-        self.update()
+    def tick(self, board):
+        self._clear_screen()
+        self._draw_dice(board)
+        self._update()
 
-    def draw_dice(self):
+    def _draw_dice(self, board):
         desired_box_size = (800, 500)
         box_gutter = 25
         max_box_size = min(desired_box_size) - 2 * box_gutter
         die_gap = 10
-        num_gaps = self.board.dimension - 1
+        num_gaps = board.dimension - 1
         gap_usage = die_gap * num_gaps
         die_usage = max_box_size - gap_usage
-        die_size = die_usage / self.board.dimension
+        die_size = die_usage / board.dimension
         normalized_die_size = self.normalize_measurement(die_size)
         dice_positions = []
-        for i in range(self.board.dimension):
+        for i in range(board.dimension):
             x = box_gutter + i * (die_size + die_gap)
-            for j in range(self.board.dimension):
+            for j in range(board.dimension):
                 y = box_gutter + j * (die_size + die_gap)
                 position = (x, y)
                 die_position = self.translateXY(position)
-                letter = self.board.get_letter((i, j))
+                letter = board.get_letter((i, j))
                 dice_positions.append({
                     'x': die_position[0],
                     'y': die_position[1],
@@ -56,3 +56,12 @@ class Boggle_Screen(Screen):
             gutter_y = (normalized_die_size - text_height) / 2
             img = font.render(die['letter'], True, (255, 0, 0))
             self.surface.blit(img, (die['x'] + gutter_x, die['y'] + gutter_y))
+
+    def event_handler(self, event):
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                self.check_word = ''
+            elif event.key == pygame.K_BACKSPACE:
+                self.check_word = self.check_word[:-1]
+            else:
+                self.check_word += event.unicode

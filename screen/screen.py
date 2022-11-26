@@ -12,12 +12,15 @@ class Screen:
         )
         pygame.display.set_caption(caption)
 
-    @staticmethod
-    def check_user_quit():
+    def do_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                return True
+                pygame.quit()
+            self.event_handler(event)
         return False
+
+    def event_handler(self, event):
+        pass
 
     def translateXY(self, pos):
         x, y = pos
@@ -27,9 +30,8 @@ class Screen:
     def normalize_measurement(self, measurement):
         return min(self.translateXY((measurement, measurement)))
 
-    def clear_screen(self):
+    def _clear_screen(self):
         self.surface.fill((0, 0, 0))
 
-    @staticmethod
-    def update():
+    def _update(self):
         pygame.display.update()
