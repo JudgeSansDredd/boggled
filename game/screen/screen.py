@@ -15,9 +15,9 @@ class Screen:
     def do_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                pygame.quit()
+                return False
             self.event_handler(event)
-        return False
+        return True
 
     def event_handler(self, event):
         pass

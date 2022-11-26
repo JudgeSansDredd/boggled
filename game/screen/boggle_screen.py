@@ -8,12 +8,20 @@ class Boggle_Screen(Screen):
         super().__init__("Nathan's Boggler", (800, 600))
         self.check_word = ''
 
-    def tick(self, board):
+    def draw_screen(self, board, highlight_path):
         self._clear_screen()
-        self._draw_dice(board)
+        self._draw_dice(board, highlight_path)
+        self._draw_check_word()
         self._update()
 
-    def _draw_dice(self, board):
+    def _draw_check_word(self):
+        font = pygame.font.SysFont('arialunicode', round(18))
+        img = font.render(self.check_word, True, (255, 0, 0))
+        _, surface_height = self.surface.get_size()
+        check_word_pos = (25, surface_height - 100)
+        self.surface.blit(img, check_word_pos)
+
+    def _draw_dice(self, board, highlight_path):
         desired_box_size = (800, 500)
         box_gutter = 25
         max_box_size = min(desired_box_size) - 2 * box_gutter
@@ -34,14 +42,15 @@ class Boggle_Screen(Screen):
                 dice_positions.append({
                     'x': die_position[0],
                     'y': die_position[1],
-                    'letter': letter
+                    'letter': letter,
+                    'highlighted': highlight_path and (i, j) in highlight_path
                 })
 
         font = pygame.font.SysFont('arialunicode', round(die_size))
         for die in dice_positions:
             pygame.draw.rect(
                 self.surface,
-                (255, 255, 255),
+                (255, 255, 255) if not die['highlighted'] else (0, 255, 0),
                 pygame.Rect(
                     die['x'],
                     die['y'],
@@ -64,4 +73,4 @@ class Boggle_Screen(Screen):
             elif event.key == pygame.K_BACKSPACE:
                 self.check_word = self.check_word[:-1]
             else:
-                self.check_word += event.unicode
+                self.check_word += event.unicode.upper()
