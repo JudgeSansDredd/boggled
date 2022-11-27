@@ -7,6 +7,7 @@ class Boggle_Screen(Screen):
     def __init__(self):
         super().__init__("Nathan's Boggler", (800, 600))
         self.check_word = ''
+        self.definition = ''
 
     def draw_screen(self, board, highlight_path):
         self._clear_screen()
@@ -16,10 +17,13 @@ class Boggle_Screen(Screen):
 
     def _draw_check_word(self):
         font = pygame.font.SysFont('arialunicode', round(18))
-        img = font.render(self.check_word, True, (255, 0, 0))
+        check_image = font.render(self.check_word, True, (255, 0, 0))
+        def_image = font.render(self.definition, True, (255, 0, 0))
         _, surface_height = self.surface.get_size()
-        check_word_pos = (25, surface_height - 100)
-        self.surface.blit(img, check_word_pos)
+        check_img_pos = (25, surface_height - 100)
+        def_img_pos = (25, surface_height -75)
+        self.surface.blit(check_image, check_img_pos)
+        self.surface.blit(def_image, def_img_pos)
 
     def _draw_dice(self, board, highlight_path):
         desired_box_size = (800, 500)
@@ -67,10 +71,15 @@ class Boggle_Screen(Screen):
             self.surface.blit(img, (die['x'] + gutter_x, die['y'] + gutter_y))
 
     def event_handler(self, event):
+        response = {}
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
                 self.check_word = ''
+                self.definition = ''
             elif event.key == pygame.K_BACKSPACE:
                 self.check_word = self.check_word[:-1]
+            elif event.key == pygame.K_RETURN or event.key == pygame.K_KP_ENTER:
+                response['lookup'] = True
             else:
                 self.check_word += event.unicode.upper()
+        return response

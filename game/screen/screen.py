@@ -13,11 +13,12 @@ class Screen:
         pygame.display.set_caption(caption)
 
     def do_events(self):
+        response = {}
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                return False
-            self.event_handler(event)
-        return True
+                response['quit'] = True
+            response = {**response, **self.event_handler(event)}
+        return response
 
     def event_handler(self, event):
         pass

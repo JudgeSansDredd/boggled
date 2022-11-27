@@ -5,8 +5,8 @@ BOARD_DIMENSIONS = 5
 def main():
     game = Game(BOARD_DIMENSIONS)
     while True:
-        cont = game.tick()
-        if not cont:
+        tick_response = game.tick()
+        if 'quit' in tick_response and tick_response['quit']:
             print("Game exited by player")
             return
 
