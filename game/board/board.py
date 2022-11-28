@@ -39,10 +39,10 @@ class Board:
             return False
         else:
             # We've already started, we have a word to check
-            for index, pos in enumerate(path):
-                if word[index] != self.get_letter(pos):
-                    # Can't be the word
-                    return False
+            wordAttempt = ''.join([self.get_letter(pos) for pos in path])
+            wordAbbrev = word[:len(wordAttempt)]
+            if wordAttempt != wordAbbrev:
+                return False
 
             # If we get here, all letters so far match
             if len(word) == len(path):
