@@ -12,6 +12,9 @@
         "preview": "vite preview"
     },
     "dependencies": {
+        "@tanstack/react-query": "^5.28.14",
+        "axios": "^1.6.8",
+        "luxon": "^3.4.4",
         "react": "^18.2.0",
         "react-dom": "^18.2.0"
     },
@@ -26,6 +29,8 @@
         ]
     },
     "devDependencies": {
+        "@tanstack/react-query-devtools": "^5.28.14",
+        "@types/luxon": "^3.4.2",
         "@types/react": "^18.2.66",
         "@types/react-dom": "^18.2.22",
         "@typescript-eslint/eslint-plugin": "^7.2.0",
