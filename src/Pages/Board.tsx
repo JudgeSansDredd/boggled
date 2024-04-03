@@ -9,7 +9,7 @@ import BoardSizeSelector from '../Components/BoardSizeSelector';
 import BoggleBoard from '../Components/BoggleBoard';
 import Timer from '../Components/Timer';
 import MainLayout from '../Layouts/MainLayout';
-import { BoardSizeType, findWord, getBoardLayout } from '../Utils';
+import { BoardSizeType, findWord, getBoardLayout, lookupWord } from '../Utils';
 
 export default function Board() {
     const [boardLayout, setBoardLayout] = useState<string[]>([
@@ -47,7 +47,9 @@ export default function Board() {
         key,
     }) => {
         if (key === 'Enter') {
-            // TODO: Try to look up the word
+            setLookupStatus({ working: true, definitionString: '' });
+            const result = await lookupWord(lookupInputValue);
+            setLookupStatus({ working: false, definitionString: result });
         } else if (key === 'Escape') {
             setLookupInputValue('');
             setLookupStatus({ working: false, definitionString: '' });
@@ -103,7 +105,8 @@ export default function Board() {
                     boardSize={boardSize}
                 />
                 <button
-                    className="p-2 bg-blue-300 rounded-full hover:bg-blue-400"
+                    type="button"
+                    className="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
                     onClick={shuffleHandler}
                 >
                     Shuffle

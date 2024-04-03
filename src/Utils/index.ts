@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 export type BoardSizeType = 'big' | 'superbig';
 export const BOARD_SIZES = {
     big: 5,
@@ -295,57 +297,58 @@ export function findWord(
     return false;
 }
 
-// interface DefinitionType {
-//     meta: {
-//         id: string;
-//         uuid: string;
-//         sort: string;
-//         src: string;
-//         section: string;
-//         stems: string[];
-//         offensive: boolean;
-//     };
-//     hom: number;
-//     hwi: {
-//         hw: string;
-//         prs: {
-//             mw: string;
-//             sound: {
-//                 audio: string;
-//                 ref: string;
-//                 stat: string;
-//             };
-//         }[];
-//     };
-//     fl: string;
-//     date: string;
-//     shortdef: string[];
-// }
+interface DefinitionType {
+    meta: {
+        id: string;
+        uuid: string;
+        sort: string;
+        src: string;
+        section: string;
+        stems: string[];
+        offensive: boolean;
+    };
+    hom: number;
+    hwi: {
+        hw: string;
+        prs: {
+            mw: string;
+            sound: {
+                audio: string;
+                ref: string;
+                stat: string;
+            };
+        }[];
+    };
+    fl: string;
+    date: string;
+    shortdef: string[];
+}
 
-// export async function lookupWord(word: string): Promise<string> {
-//     // HACK: Remove X-Requested-With header before call, it's added by inertia but borks CORS here
-//     delete axios.defaults.headers.common['X-Requested-With'];
-//     const res = await axios.get(
-//         `https://dictionaryapi.com/api/v3/references/collegiate/json/${word}`,
-//         {
-//             params: { key: import.meta.env.VITE_DICTIONARY_API_KEY },
-//         }
-//     );
-//     const data = res.data as DefinitionType[] | string[];
-//     if (data.length) {
-//         if (typeof data[0] === 'object') {
-//             const castData = data as DefinitionType[];
-//             return castData
-//                 .map((d) => d.shortdef)
-//                 .flat()
-//                 .map((d, i) => `${i + 1}) ${d}`)
-//                 .join(' ');
-//         } else {
-//             const castData = data as string[];
-//             const alternates = castData.join(', ');
-//             return `Did you mean?: ${alternates}`;
-//         }
-//     } else {
-//         return '';
-//     }
-// }
+export async function lookupWord(word: string): Promise<string> {
+    // HACK: Remove X-Requested-With header before call, it's added by inertia but borks CORS here
+    delete axios.defaults.headers.common['X-Requested-With'];
+    const res = await axios.get(
+        `https://dictionaryapi.com/api/v3/references/collegiate/json/${word}`,
+        {
+            params: { key: import.meta.env.VITE_DICTIONARY_API_KEY },
+        }
+    );
+    const data = res.data as DefinitionType[] | string[];
+    if (data.length) {
+        if (typeof data[0] === 'object') {
+            const castData = data as DefinitionType[];
+            return castData
+                .map((d) => d.shortdef)
+                .flat()
+                .map((d, i) => `${i + 1}) ${d}`)
+                .join(' ');
+        } else {
+            const castData = data as string[];
+            console.log('🚀 ~ lookupWord ~ castData:', castData);
+            const alternates = castData.join(', ');
+            return `Did you mean?: ${alternates}`;
+        }
+    } else {
+        return '';
+    }
+}
