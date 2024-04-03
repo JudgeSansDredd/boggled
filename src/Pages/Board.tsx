@@ -5,10 +5,11 @@ import {
     useEffect,
     useState,
 } from 'react';
+import BoardSizeSelector from '../Components/BoardSizeSelector';
 import BoggleBoard from '../Components/BoggleBoard';
 import Timer from '../Components/Timer';
 import MainLayout from '../Layouts/MainLayout';
-import { BOARD_SIZES, BoardSizeType, findWord, getBoardLayout } from '../Utils';
+import { BoardSizeType, findWord, getBoardLayout } from '../Utils';
 
 export default function Board() {
     const [boardLayout, setBoardLayout] = useState<string[]>([
@@ -75,22 +76,25 @@ export default function Board() {
     return (
         <MainLayout pageName="Board">
             <div className="flex flex-col items-center gap-4 mt-4">
-                <div className="text-2xl text-blue-700">Boggled</div>
-                <select onChange={handleBoardSizeChange}>
-                    <option value="big">
-                        {BOARD_SIZES.big} x {BOARD_SIZES.big}
-                    </option>
-                    <option value="superbig">
-                        {BOARD_SIZES.superbig} x {BOARD_SIZES.superbig}
-                    </option>
-                </select>
-                <div className="flex">
-                    <div>Allow Diagonals?</div>
+                <div className="text-2xl">Boggled</div>
+                <BoardSizeSelector
+                    handleBoardSizeChange={handleBoardSizeChange}
+                />
+                <div className="flex items-center mb-4">
                     <input
+                        id="allow-diagonals"
                         type="checkbox"
-                        checked={allowDiagonal}
+                        value=""
+                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                         onChange={handleDiagonalClick}
+                        checked={allowDiagonal}
                     />
+                    <label
+                        htmlFor="allow-diagonals"
+                        className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                    >
+                        Allow diagonals?
+                    </label>
                 </div>
                 <Timer roundEndsAt={roundEndsAt} />
                 <BoggleBoard
@@ -104,13 +108,18 @@ export default function Board() {
                 >
                     Shuffle
                 </button>
-                <div className="flex items-center gap-4">
-                    <div>Lookup</div>
+                <div className="flex items-end gap-4">
+                    <label
+                        htmlFor="lookup"
+                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                        Lookup
+                    </label>
                     <input
-                        className="rounded-md"
                         type="text"
-                        name="lookup"
                         id="lookup"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        required
                         value={lookupInputValue}
                         onChange={handleInputChange}
                         onKeyDown={handleInputKeyDown}
