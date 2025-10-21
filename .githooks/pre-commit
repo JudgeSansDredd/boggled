@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
+npm run typecheck
 npx lint-staged
-npm run build

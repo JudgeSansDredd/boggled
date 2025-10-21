@@ -2,9 +2,9 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ .Values.system }}-ui-ingress
+  name: {{ .Values.system }}-ingress
   labels:
-    app: {{ .Values.system }}-ui
+    app: {{ .Values.system }}
     tenant: {{ .Values.system }}
   annotations:
     cert-manager.io/cluster-issuer: lets-encrypt-prod
@@ -24,6 +24,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: {{ .Values.system }}-ui-service
+                name: {{ .Values.system }}-service
                 port:
                   number: {{ .Values.components.ui.ingress.port }}
