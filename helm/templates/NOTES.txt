@@ -1,0 +1,23 @@
+1. {{ .Release.Name }} Deployment Information:
+   - Release Name: {{ .Release.Name }}
+   - Namespace: {{ .Release.Namespace }}
+   - Chart Name: {{ .Chart.Name }}
+   - Chart Version: {{ .Chart.Version }}
+
+2. {{ .Release.Name }} Service Information:
+   - Service Name: {{ .Values.system }}-service
+   - Service Type: LoadBalancer
+   - Service Port: 80
+
+3. Useful Commands:
+   - Check the {{ .Release.Name }} Deployment Status:
+     helm status {{ .Release.Name }}
+
+   - Get Detailed Information about the {{ .Release.Name }} Deployment:
+     helm get all {{ .Release.Name }}
+
+     helm diff
+
+4. Clean Up:
+   - To uninstall/delete the {{ .Release.Name }} deployment, run:
+     helm uninstall {{ .Release.Name }}

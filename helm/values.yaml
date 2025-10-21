@@ -1,0 +1,42 @@
+system: boggled
+
+components:
+    ui:
+        name: boggled
+
+        affinity: null
+
+        image:
+            # repository: nginxdemos/hello
+            # tag: "latest"
+            repository: gitea.pixelparasol.com/nathan/boggled
+            tag: 'latest'
+            imagePullPolicy: 'Always'
+            imagePullSecrets: 'gitea-auth'
+
+        ingress:
+            tls: true
+            domain: boggled.nathanbstanley.com
+            path: /
+            className: 'nginx'
+            port: 80
+
+        service:
+            type: ClusterIP
+            ports:
+                - protocol: TCP
+                  port: 80
+                  targetPort: 80
+                  name: http
+
+        deployment:
+            resources:
+                limits:
+                    memory: '128Mi'
+                    cpu: '500m'
+
+        volumes:
+            - name: nginx-configmap
+              type: configMap
+              mountPath: '/etc/nginx/conf.d/default.conf'
+              subPath: 'default.conf'

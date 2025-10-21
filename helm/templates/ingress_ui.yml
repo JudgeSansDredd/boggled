@@ -1,0 +1,29 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Values.system }}-ui-ingress
+  labels:
+    app: {{ .Values.system }}-ui
+    tenant: {{ .Values.system }}
+  annotations:
+    cert-manager.io/cluster-issuer: lets-encrypt-prod
+    nginx.ingress.kubernetes.io/rewrite-target: /
+
+spec:
+  ingressClassName: {{ .Values.components.ui.ingress.className }}
+  tls:
+    - hosts:
+      - "{{ .Values.components.ui.ingress.domain }}"
+      secretName: {{ .Values.system }}-ingress-tls
+  rules:
+    - host: "{{ .Values.components.ui.ingress.domain }}"
+      http:
+        paths:
+          - path: {{ .Values.components.ui.ingress.path }}
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.system }}-ui-service
+                port:
+                  number: {{ .Values.components.ui.ingress.port }}

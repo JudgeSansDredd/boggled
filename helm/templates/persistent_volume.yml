@@ -1,0 +1,9 @@
+{{- range $system, $settings := .Values.components -}}
+  {{ if $settings.volumes }}
+    {{- range $component, $volume := $settings.volumes -}}
+    {{- if ne $volume.type "configMap" -}}
+{{ include "system.persistent_volume.component"  (dict "component" $settings "volume" $volume "values" $.Values "release" $.Release) }}
+    {{- end }}
+    {{- end }}
+  {{- end }}
+{{- end }}
