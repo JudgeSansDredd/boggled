@@ -1,15 +1,20 @@
+PROJECT_NAME := boggled
+
 # Docker Secret Pull Variables
 DOCKER_USERNAME := nathan
 DOCKER_EMAIL := nathan@pixelparasol.com
 
 # Docker Image Variables
 DOCKER_REGISTRY=gitea.pixelparasol.com/nathan
-IMAGE_NAME := boggled
+IMAGE_NAME := $(PROJECT_NAME)
 TAG := $(shell git rev-parse --short HEAD)
 # TAG := $(GIT_HASH)
 # TAG := latest
 
-all: npm-build docker-build docker-login docker-push
+# K8s variables
+NAMESPACE := $(PROJECT_NAME)
+
+all: npm-build docker-build docker-login docker-push helm-upgrade
 
 npm-build:
 	npm run build
@@ -25,3 +30,6 @@ docker-login:
 docker-push:
 	docker push $(DOCKER_REGISTRY)/$(IMAGE_NAME):$(TAG)
 	docker push $(DOCKER_REGISTRY)/$(IMAGE_NAME):latest
+
+helm-upgrade:
+	helm upgrade --install $(NAMESPACE) ./helm -n $(NAMESPACE)
