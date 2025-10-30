@@ -32,4 +32,4 @@ docker-push:
 	docker push $(DOCKER_REGISTRY)/$(IMAGE_NAME):latest
 
 helm-upgrade:
-	helm upgrade --install $(NAMESPACE) ./helm -n $(NAMESPACE)
+	helm upgrade --install $(NAMESPACE) ./helm -n $(NAMESPACE) --create-namespace
