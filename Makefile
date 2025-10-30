@@ -14,7 +14,10 @@ TAG := $(shell git rev-parse --short HEAD)
 # K8s variables
 NAMESPACE := $(PROJECT_NAME)
 
-all: npm-build docker-build docker-login docker-push helm-upgrade
+all: npm-install npm-build docker-build docker-login docker-push helm-upgrade
+
+npm-install:
+	npm ci
 
 npm-build:
 	npm run build
