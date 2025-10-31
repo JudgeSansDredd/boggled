@@ -1,3 +1,5 @@
+.PHONY: all npm-install npm-build docker-build docker-login docker-push helm-upgrade
+
 PROJECT_NAME := boggled
 
 # Docker Secret Pull Variables
