@@ -134,8 +134,12 @@ export function findWord(
   } else {
     // Checking the letters so far...
     // Make a path-word out of the path coords
+    // Q on the board implies QU
     const pathWord = path
-      .map((p) => boardLayout[rowColToNum(p, boardSize)])
+      .map((p) => {
+        const letter = boardLayout[rowColToNum(p, boardSize)];
+        return letter === 'Q' ? 'QU' : letter;
+      })
       .join('');
     // Make an abbreviated word out of the needle, but x characters long (based on length of path)
     const wordAbbrev = word.substring(0, pathWord.length);
